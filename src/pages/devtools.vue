@@ -1,13 +1,17 @@
 <template>
 	<div class="devtools">
 		<div class="panel">
-			<the-image></the-image>
-			<the-code></the-code>
+			<the-image :markers="markers" :src="src"></the-image>
+			<the-code :markers="markers" :src="src"></the-code>
 		</div>
 		<the-three></the-three>
 	</div>
 </template>
 <script setup lang="ts">
+import { fetchURL } from "@/utils/index"
+const markers = reactive([])
+const src = ref(fetchURL("../assets/texture.jpeg"))
+
 </script>
 <style lang="scss" scoped>
 .devtools {
