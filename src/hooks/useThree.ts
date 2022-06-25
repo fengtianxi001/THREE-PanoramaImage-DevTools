@@ -1,12 +1,8 @@
 import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import { onMounted, Ref, shallowRef } from 'vue';
-
-export function useThree(
-  element: Ref<HTMLElement | undefined>,
-  src: string,
-  markerCoords: Ref<[number, number, number]>
-) {
+import { markerType } from '#/index';
+export function useThree(element: Ref<HTMLElement | undefined>, markers: Array<markerType>, src: string) {
   const scene = shallowRef();
   const camera = shallowRef();
   const renderer = shallowRef();
@@ -36,7 +32,7 @@ export function useThree(
   const initCamera = (width: number, height: number) => {
     const camera = new THREE.PerspectiveCamera(40, width / height, 1, 1000);
     // camera.position.set(0, 0, 0);
-    camera.position.set(0, 1.4, 0);
+    camera.position.set(2, 0, 0);
     return camera;
   };
   const initRenderer = (width: number, height: number) => {
@@ -47,6 +43,9 @@ export function useThree(
   };
   const initControl = () => {
     const control = new OrbitControls(camera.value, renderer.value.domElement);
+    control.enablePan = false;
+    control.maxDistance = 10;
+    control.target.set(0, 0, 0);
     return control;
   };
   const initSphere = () => {
@@ -73,12 +72,12 @@ export function useThree(
       marker.value = new THREE.Mesh(geometry, material);
       marker.value.position.set(...coords);
       scene.value.add(marker.value);
-      camera.value.lookAt(...coords)
+      camera.value.lookAt(...coords);
       // control.value.target.set(...coords);
     }
   };
-  watch([markerCoords], () => {
-    addMarker(markerCoords.value);
+  watch([markers], () => {
+    // addMarker(markers);
   });
   return {
     scene,

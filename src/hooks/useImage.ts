@@ -1,8 +1,10 @@
-import { markerType } from '#/markes';
+import { markerType } from '#/index';
 import { Ref } from 'vue';
+import { convert2dCoordinatesTo3dCoordinates } from '@/utils/index';
 export function useImage(container: Ref<HTMLElement>, markers: Array<markerType>, src: string) {
   const canvas = document.createElement('canvas');
   const ctx = canvas.getContext('2d') as CanvasRenderingContext2D;
+  const history = [];
   const state = reactive({
     zoom: 1,
     style: {
@@ -22,6 +24,26 @@ export function useImage(container: Ref<HTMLElement>, markers: Array<markerType>
     }
     state.style.transform = `scale(${state.zoom})`;
   };
+  const onClick = (event: MouseEvent) => {
+    // console.log(event);
+    drawMarker(event);
+  };
+  const drawMarker = (event: MouseEvent) => {
+    const { offsetX, offsetY } = event;
+    ctx.beginPath();
+    ctx.arc(offsetX, offsetY, 6, 0, 2 * Math.PI);
+    ctx.stroke();
+    ctx.closePath();
+    //每次标注完成后, 写入快照
+    // this.onSnapshoot();
+    // console.log(this.history.length)
+    //记录markers
+    markers.push({
+      coordinates_2d: [offsetX, offsetY],
+      coordinates_3d: [...convert2dCoordinatesTo3dCoordinates([canvas.width, canvas.height], [offsetX, offsetY])],
+      name: `#${markers.length}`,
+    });
+  };
   onMounted(() => {
     const image = new Image();
     image.src = src;
@@ -31,6 +53,7 @@ export function useImage(container: Ref<HTMLElement>, markers: Array<markerType>
       ctx.drawImage(image, 0, 0, canvas.width, canvas.height);
       container.value.appendChild(canvas);
       canvas.addEventListener('wheel', onWheel);
+      canvas.addEventListener('click', onClick);
     };
   });
   watch([state.style], () => {

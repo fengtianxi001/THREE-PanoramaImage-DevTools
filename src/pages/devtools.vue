@@ -2,9 +2,9 @@
 	<div class="devtools">
 		<div class="panel">
 			<the-image :markers="markers" :src="src"></the-image>
-			<the-code :markers="markers" :src="src"></the-code>
+			<the-code :markers="markers"></the-code>
 		</div>
-		<the-three></the-three>
+		<the-three :markers="markers" :src="src"></the-three>
 	</div>
 </template>
 <script setup lang="ts">
@@ -20,15 +20,24 @@ const src = ref(fetchURL("../assets/texture.jpeg"))
 	padding: 10px;
 	display: grid;
 	grid-gap: 10px;
-	grid-template-columns: 1fr 1fr;
+	grid-template-columns: 1.2fr 1fr;
 	background-image: url(../assets/desert.jpeg);
 	background-size: cover;
 
 	.panel {
+		width: 100%;
+		height: calc(100vh - 20px);
 		display: flex;
 		grid-gap: 10px;
 		flex-direction: column;
-		// grid-template-rows: 1fr ;
+
+		:deep(.base-panel:nth-child(1)) {
+			flex-shrink: 0;
+		}
+
+		:deep(.base-panel:nth-child(2)) {
+			flex: 1;
+		}
 	}
 }
 </style>

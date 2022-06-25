@@ -4,10 +4,16 @@
 			<div class="base-panel__header">
 				<div class="logo">
 					<img src="@/assets/logo.png" alt="" />
-					<span class="title">Texture</span>
+					<span class="title">{{ title }}</span>
 				</div>
 				<div class="buttons">
-					<i></i>
+					<template v-for="(button, index) in buttons" :key="index">
+						<el-tooltip effect="dark" :content="button.tip" placement="bottom-end">
+							<div class="panel-button">
+								<i :class="button.icon"></i>
+							</div>
+						</el-tooltip>
+					</template>
 				</div>
 			</div>
 			<div class="base-panel__body">
@@ -16,6 +22,14 @@
 		</div>
 	</div>
 </template>
+<script setup lang="ts">
+import { PanelButtonType } from "#/index";
+interface PropsType {
+	title: string,
+	buttons?: Array<PanelButtonType>
+}
+const props = defineProps<PropsType>()
+</script>
 <style lang="scss" scoped>
 .base-panel {
 	width: 100%;
@@ -34,6 +48,7 @@
 		border-radius: 2px;
 		// border: 1px solid #dfdfdf;
 		overflow: hidden;
+
 		.base-panel__header {
 			height: 45px;
 			color: #bebebe;
@@ -59,11 +74,30 @@
 				.title {
 					color: #3a42f5;
 					font-weight: bolder;
-					font-size: 18px;
+					font-size: 16px;
 				}
 			}
 
-			.buttons {}
+			.buttons {
+				display: flex;
+				align-items: center;
+				grid-column-gap: 6px;
+
+				.panel-button {
+					width: 24px;
+					height: 24px;
+					// background-color: #dedede;
+					border-radius: 2px;
+					color: #5a9cf8;
+					border: 1px solid #dedede;
+					// background-color: red;
+					display: flex;
+					align-items: center;
+					justify-content: center;
+					cursor: pointer;
+					font-size: 12px;
+				}
+			}
 		}
 
 		.base-panel__body {
