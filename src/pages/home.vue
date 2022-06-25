@@ -13,7 +13,7 @@ import { useDevTools } from "@/hooks/useDevtools"
 // import { ref } from "vue";
 const threeRef = ref()
 const canvasRef = ref()
-const image = "http://localhost:3000/123.png"
+const image = "http://localhost:3000/public/texture.jpeg"
 const { marker } = useDevTools(canvasRef, image)
 useThree(threeRef, image, marker)
 
