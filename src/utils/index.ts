@@ -1,6 +1,6 @@
-export function fetchURL(src: string) {
-  return new URL(src, import.meta.url).href;
-}
+// export function fetchURL(src: string) {
+//   return new URL(src, import.meta.url).href;
+// }
 
 export function convert2dCoordinatesTo3dCoordinates(size: [number, number], coordinates: [number, number]) {
   const [width, height] = size;

@@ -8,9 +8,10 @@
 	</div>
 </template>
 <script setup lang="ts">
-import { fetchURL } from "@/utils/index"
+import src from "../assets/texture.jpeg"
+// import { fetchURL } from "@/utils/index"
 const markers = reactive([])
-const src = ref(fetchURL("../assets/texture.jpeg"))
+// const src = ref(fetchURL("../assets/texture.jpeg"))
 
 </script>
 <style lang="scss" scoped>

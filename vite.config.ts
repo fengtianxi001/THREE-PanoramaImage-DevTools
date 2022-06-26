@@ -4,6 +4,10 @@ import path from 'path';
 import AutoImport from 'unplugin-auto-import/vite';
 import Components from 'unplugin-vue-components/vite';
 export default defineConfig({
+  base: './',
+  build: {
+    outDir: './docs',
+  },
   plugins: [
     vue({
       reactivityTransform: true,
