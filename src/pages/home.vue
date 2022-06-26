@@ -1,28 +1,43 @@
 <template>
-	<div class="home">
-		<div>
-			<canvas ref="canvasRef" width="500" height="500"></canvas>
+	<div class="devtools">
+		<div class="panel">
+			<the-image :markers="markers" :src="src"></the-image>
+			<the-code :markers="markers"></the-code>
 		</div>
-		<div ref="threeRef"></div>
-
+		<the-three :markers="markers" :src="src"></the-three>
 	</div>
 </template>
 <script setup lang="ts">
-import { useThree } from "@/hooks/useThree";
-import { useDevTools } from "@/hooks/useDevtools"
-// import { ref } from "vue";
-const threeRef = ref()
-const canvasRef = ref()
-const image = "http://localhost:3000/public/texture.jpeg"
-const { marker } = useDevTools(canvasRef, image)
-useThree(threeRef, image, marker)
+import { fetchURL } from "@/utils/index"
+const markers = reactive([])
+const src = ref(fetchURL("../assets/texture.jpeg"))
 
 </script>
 <style lang="scss" scoped>
-.home {
+.devtools {
 	width: 100vw;
 	height: 100vh;
+	padding: 10px;
 	display: grid;
-	grid-template-columns: 1fr 1fr;
+	grid-gap: 10px;
+	grid-template-columns: 1.2fr 1fr;
+	background-image: url(../assets/desert.jpeg);
+	background-size: cover;
+
+	.panel {
+		width: 100%;
+		height: calc(100vh - 20px);
+		display: flex;
+		grid-gap: 10px;
+		flex-direction: column;
+
+		:deep(.base-panel:nth-child(1)) {
+			flex-shrink: 0;
+		}
+
+		:deep(.base-panel:nth-child(2)) {
+			flex: 1;
+		}
+	}
 }
 </style>

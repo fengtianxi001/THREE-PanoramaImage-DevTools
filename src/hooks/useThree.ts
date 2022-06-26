@@ -23,15 +23,15 @@ export function useThree(element: Ref<HTMLElement | undefined>, markers: Array<m
       const light = new THREE.AmbientLight(0xffffff);
       scene.value.add(light);
     }
+   
   });
   const initScene = () => {
     const scene = new THREE.Scene();
     scene.background = new THREE.Color(0xbfe3dd);
     return scene;
   };
-  const initCamera = (width: number, height: number) => {
+  const initCamera = (width: number, height: number): THREE.PerspectiveCamera => {
     const camera = new THREE.PerspectiveCamera(40, width / height, 1, 1000);
-    // camera.position.set(0, 0, 0);
     camera.position.set(2, 0, 0);
     return camera;
   };
@@ -44,8 +44,9 @@ export function useThree(element: Ref<HTMLElement | undefined>, markers: Array<m
   const initControl = () => {
     const control = new OrbitControls(camera.value, renderer.value.domElement);
     control.enablePan = false;
-    control.maxDistance = 10;
+    // control.maxDistance = 10;
     control.target.set(0, 0, 0);
+
     return control;
   };
   const initSphere = () => {
@@ -62,9 +63,7 @@ export function useThree(element: Ref<HTMLElement | undefined>, markers: Array<m
     renderer.value.render(scene.value, camera.value);
   };
   const addMarker = (coords: [number, number, number]) => {
-    if (marker.value) {
-      marker.value.position.set(...coords);
-    } else {
+
       const geometry = new THREE.SphereGeometry(0.1, 64, 64);
       const material = new THREE.MeshLambertMaterial({
         color: 0xd7d710,
@@ -72,11 +71,26 @@ export function useThree(element: Ref<HTMLElement | undefined>, markers: Array<m
       marker.value = new THREE.Mesh(geometry, material);
       marker.value.position.set(...coords);
       scene.value.add(marker.value);
-      camera.value.lookAt(...coords);
-      // control.value.target.set(...coords);
-    }
+
+      camera.value.position.set(0, 0, 0);
+      // camera.value.position.set(-1 * coords[0], -1 * coords[1], -1 * coords[2]);
+      // control.value.target = new THREE.Vector3(...coords);
+      // console.log(coords)
+      const [x,y,z] = coords
+      control.value.target = new THREE.Vector3(x*0.01,y*0.01,z*0.01);
+      console.log(control.value.target)
+      // setInterval(() => {
+      //   control.value.target.set(Math.random() * 10, Math.random() * 10, Math.random() * 10);
+      // }, 1000);
+
+      control.value.update();
   };
   watch([markers], () => {
+    markers.forEach((marker) => {
+      addMarker(marker.coordinates_3d as [number, number, number]);
+      console.log("inter")
+    });
+    // console.log(123)
     // addMarker(markers);
   });
   return {
